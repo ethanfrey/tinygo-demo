@@ -48,6 +48,17 @@ And no auto-generated imports. Now, let's try this with wasmer
 
 **TODO** automate this build system a bit better... at least a tagged docker image I publish would be good
 
+## JSON
+
+I tried to add json parsing with "encoding/json" and the compiler blew up.
+Reflect is not supported.
+
+This is an open issue: https://github.com/tinygo-org/tinygo/issues/93#issuecomment-552050452
+
+I don't know if there are any workarounds.
+
+Tracking cgo, which we need some to be able to parse structs (like Buffer): https://github.com/tinygo-org/tinygo/issues/60
+
 ## Wasmer
 
 * TODO: Write a simple tester in go-ext-wasm and see if we can run functions

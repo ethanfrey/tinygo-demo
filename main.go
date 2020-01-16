@@ -1,5 +1,9 @@
 package main
 
+import (
+	"encoding/json"
+)
+
 func main() {
 }
 
@@ -8,20 +12,27 @@ func add(a, b int) int {
 	return a + b
 }
 
-// why is this not exported???
 //go:export relic
 func relic(a int) int {
 	l := counter("foobar")
 	return 10 * a + l
 }
 
-// Name mismatch cause no wasm export
-//go:export think
-func foobar(a, b int) int {
-	return a + b
+type model struct {
+	Age int32 `json:"age"`
 }
 
-// []byte cause no wasm export
+//go:export think
+func foobar() int {
+	var data model
+	input := `{"age":17}`
+	err := json.Unmarshal(input, &data)
+	if err != nil {
+		return -1
+	}
+	return data.Age
+}
+
 //go:export bcounter
 func bcounter(a []byte) int {
 	return len(a)
