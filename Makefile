@@ -1,6 +1,7 @@
 .PHONY: build view all
 
 all: build public
+	@ ls -l main.wasm
 
 build:
 	tinygo build -o main.wasm -target wasm ./main.go
