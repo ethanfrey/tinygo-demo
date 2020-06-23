@@ -1,14 +1,6 @@
 # Investigating tinygo
 
-Try compiling with `make` and check out the imports/exports of the file.
-
-You will need to [install tinygo](https://tinygo.org/getting-started/) first.
-For Ubuntu, this is:
-
-```
-wget https://github.com/tinygo-org/tinygo/releases/download/v0.11.0/tinygo_0.11.0_amd64.deb
-sudo dpkg -i tinygo_0.11.0_amd64.deb
-```
+Some experiments with what it can do
 
 ## Research
 
@@ -18,7 +10,14 @@ These are all the directives we can use on functions: https://github.com/tinygo-
 
 ## Building stuff
 
-Check out and build and docker file:
+You can use the standard file:
+
+```
+docker pull tinygo/tinygo:0.13.1
+```
+
+Or if you want to hack the exports (runtime...), check out and build and docker file:
+(this is still on 0.11, so needs an update for sure)
 
 ```sh
 git clone https://github.com/confio/tinygo
@@ -44,7 +43,7 @@ e think
 e relic
 ```
 
-And no auto-generated imports. Now, let's try this with wasmer
+And no auto-generated imports. Now, let's try this with wasmer..
 
 **TODO** automate this build system a bit better... at least a tagged docker image I publish would be good
 
