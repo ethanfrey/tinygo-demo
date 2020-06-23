@@ -33,19 +33,30 @@ Go to this directory and:
 make
 ```
 
-You see the exports we wrote:
+You see the exports we wrote (properly renamed):
 
 ```
-e add
-e bcounter
-e counter
-e think
-e relic
+wasm-nm -e main.wasm
+e __wasm_call_ctors
+e memset
+e _start
+e go_scheduler
+e resume
+e init
+e query
+e migrate
+e /code/main.go.main
 ```
 
-And no auto-generated imports. Now, let's try this with wasmer..
+And imports:
 
-**TODO** automate this build system a bit better... at least a tagged docker image I publish would be good
+```
+wasm-nm -i main.wasm
+i fd_write
+```
+
+Note that I have a [demo commit to remove some of this](https://github.com/confio/tinygo/commit/95a4707853f8c8522f6a51db14c8306727a3776f),
+but need to figure out the proper way to bring this upstream.
 
 ## JSON
 
