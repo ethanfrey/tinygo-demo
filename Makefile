@@ -13,7 +13,8 @@ build-docker:
 	docker run --rm -v $(shell pwd):/code $(DOCKER_IMAGE) tinygo build -o /code/main.wasm -target wasm /code/main.go
 
 view:
-	wasm-nm main.wasm
+	@ wasm-nm main.wasm
+	@ ls -l main.wasm
 
 public:
 	wasm-nm -e main.wasm
