@@ -16,16 +16,6 @@ You can use the standard file:
 docker pull tinygo/tinygo:0.13.1
 ```
 
-Or if you want to hack the exports (runtime...), check out and build and docker file:
-(this is still on 0.11, so needs an update for sure)
-
-```sh
-git clone https://github.com/confio/tinygo
-cd tinygo
-git checkout cosmwasm
-docker build . -t tinygo:confio
-```
-
 You will also want [`wasm-nm`](https://crates.io/crates/wasm-nm) to investigate the wasm output.
 
 ```
@@ -63,8 +53,60 @@ wasm-nm -i main.wasm
 i fd_write
 ```
 
-Note that I have a [demo commit to remove some of this](https://github.com/confio/tinygo/commit/95a4707853f8c8522f6a51db14c8306727a3776f),
-but need to figure out the proper way to bring this upstream.
+You can dig in more with `make view`.
+
+## Custom compiles
+
+If you want to hack the exports, check out and build and docker file:
+
+```sh
+git clone https://github.com/confio/tinygo
+cd tinygo
+git checkout cosmwasm-v2
+docker build . -f Dockerfile.wasm -t cosmwasm/tinygo:latest
+```
+
+Now, try compiling and testing with:
+
+```
+make build-cosmwasm
+make view
+```
+
+Sample Result (note fewer exports and importantly no imports required):
+
+```
+e __wasm_call_ctors
+e memset
+e _start
+e init
+e query
+e migrate
+e /code/main.go.main
+e handle
+-rwxr-xr-x 1 root root 5335 jun 23 21:17 main.wasm
+```
+
+And for even smaller (production) builds, try:
+
+```
+make build-cosmwasm-trim
+make view
+```
+
+Sample Result (look at the code size just shrinking...):
+
+``` 
+e __wasm_call_ctors
+e memset
+e _start
+e init
+e query
+e migrate
+e /code/main.go.main
+e handle
+-rwxr-xr-x 1 root root 1022 jun 23 21:17 main.wasm
+```
 
 ## JSON
 
@@ -73,17 +115,7 @@ Reflect is not supported.
 
 This is an open issue: https://github.com/tinygo-org/tinygo/issues/93#issuecomment-552050452
 
-I don't know if there are any workarounds.
+The only "workaround" I know of is to use https://github.com/vugu/vjson which does compile with TinyGo
 
 Tracking cgo, which we need some to be able to parse structs (like Buffer): https://github.com/tinygo-org/tinygo/issues/60
-
-## Wasmer
-
-* TODO: Write a simple tester in go-ext-wasm and see if we can run functions
-* TODO: Try to implement standard cosmwasm api
-* TODO: Connect with rust cosmwasm
-* TODO: Implement compatibility
-
-At the end, we should be able to get a go hello world working in cosmwasm
-
-Let's check feasibility, then pitch
+It seems there is progess, but it may still require the `-no-debug` flag, and if you have any trouble, look at those issues for hints.
